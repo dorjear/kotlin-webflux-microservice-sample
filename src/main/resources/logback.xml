@@ -1,0 +1,18 @@
+<configuration>
+    <appender name="consoleAppender"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <provider class="net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider"/>
+            <customFields>{"app":"kotlin-webflux-microservice-sample"}</customFields>
+            <version>${APP_VERSION:-1}</version>
+            <fieldNames>
+                <thread>[ignore]</thread>
+                <logger>logger</logger>
+                <levelValue>[ignore]</levelValue>
+            </fieldNames>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+    </root>
+</configuration>

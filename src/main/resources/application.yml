@@ -1,0 +1,7 @@
+app:
+  external:
+    getAgeUrl: "https://api.agify.io/?name="
+    getGenderUrl: "https://api.genderize.io/?name="
+    getNationalityUrl: "https://api.nationalize.io/?name="
+server:
+  shutdown: graceful

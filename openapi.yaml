@@ -1,0 +1,45 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Profile Service
+
+servers:
+  - url: https://tony.com.au/api
+paths:
+  /profile/{name}:
+    get:
+      summary: Get profile from name
+      description: |
+        Get age, gender, nationality from name
+      parameters:
+              - in: path
+                name: name
+                schema:
+                  type: string
+                required: true
+                description: The name of the profile
+      responses:
+        200:
+          description: Check accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDetails'
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+
+
+components:
+  schemas:
+    ProfileDetails:
+      type: object
+      properties:
+        age:
+          type: integer
+        gender:
+          type: string
+        nationality:
+          type: string
+
