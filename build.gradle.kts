@@ -1,19 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-plugins {
-    id("org.springframework.boot") version "2.4.0"
-    id("io.spring.dependency-management") version "1.0.10.RELEASE"
-    kotlin("jvm") version "1.4.20"
-    kotlin("plugin.spring") version "1.4.20"
-    jacoco
-}
-
 group = "au.com.tony.sample.webflux"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
     jcenter()
+}
+
+plugins {
+    id("org.springframework.boot") version "2.4.5"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    kotlin("jvm") version "1.4.20"
+    kotlin("plugin.spring") version "1.4.20"
+    jacoco
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2020.0.2")
+    }
 }
 
 dependencies {
@@ -23,19 +29,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("net.logstash.logback:logstash-logback-encoder:6.4")
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude("org.junit.vintage", "junit-vintage-engine")
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
-
     testImplementation("org.mock-server:mockserver-junit-jupiter:5.11.1")
-    implementation(kotlin("stdlib-jdk8"))
-}
-
-sourceSets {
-    val main by getting
 }
 
 tasks.withType<KotlinCompile> {
@@ -56,7 +55,7 @@ tasks.withType<Test> {
     finalizedBy("jacocoTestReport", "jacocoTestCoverageVerification")
 }
 
-val jacocoExclude = sourceSets.main.get().output.asFileTree.matching {
+val jacocoMatching = sourceSets.main.get().output.asFileTree.matching {
     "au/com/tony"
 }
 
@@ -66,7 +65,7 @@ tasks {
             xml.isEnabled = true
             html.isEnabled = true
         }
-        classDirectories.setFrom(jacocoExclude)
+        classDirectories.setFrom(jacocoMatching)
     }
     jacocoTestCoverageVerification {
         violationRules {
@@ -76,7 +75,7 @@ tasks {
                 }
             }
         }
-        classDirectories.setFrom(jacocoExclude)
+        classDirectories.setFrom(jacocoMatching)
     }
 }
 val compileKotlin: KotlinCompile by tasks

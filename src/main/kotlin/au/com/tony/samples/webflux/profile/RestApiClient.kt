@@ -17,13 +17,15 @@ class RestApiClient(private val webClient: WebClient) {
         return webClient
             .get()
             .uri(uri)
-            .exchangeToMono { handleResponse(it, uri, clazz) }
+            .exchangeToMono {
+                handleResponse(it, uri, clazz)
+            }
     }
 
     private fun <T> handleResponse(response: ClientResponse, uri: String, clazz: Class<T>): Mono<T> {
         return when {
             response.statusCode().is2xxSuccessful -> {
-                response.bodyToMono(clazz).doOnNext{logger.info(it.toString())}
+                response.bodyToMono(clazz).doOnNext{logger.debug(it.toString())}
             }
             else -> {
                 response.bodyToMono(String::class.java).flatMap { body ->

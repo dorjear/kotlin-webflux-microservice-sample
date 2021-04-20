@@ -4,13 +4,18 @@ info:
   title: Profile Service
 
 servers:
-  - url: https://tony.com.au/api
+  - url: http://some-domain/api
 paths:
   /profile/{name}:
     get:
-      summary: Get profile from name
+      summary: Get profile details(age, gender, nationality) from a givin name
       description: |
-        Get age, gender, nationality from name
+        This API Return age, gender, nationality from a givin name.
+        The name is passed from the path variable. Any input are accepted yet not all names are with full information.
+        The age, gender, nationality are got from agify.io, genderize.io, nationalize.io.
+        The downstream may return null information on a given name.
+        In this case, this API will return null on the corresponding information as well.
+        The nationalize.io will return a list of possible ISO 3166-1 alpha-2 country code order by probability. This api will return the first record from there.
       parameters:
               - in: path
                 name: name
@@ -38,8 +43,11 @@ components:
       properties:
         age:
           type: integer
+          description: value from agify.io
         gender:
           type: string
+          description: male or femail from genderize.io
         nationality:
           type: string
+          description: The nationalize.io will return a list of possible ISO 3166-1 alpha-2 country code order by probability. This propertiy is the first record from there.
 

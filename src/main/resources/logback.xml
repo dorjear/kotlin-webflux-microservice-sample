@@ -15,4 +15,7 @@
     <root level="INFO">
         <appender-ref ref="consoleAppender"/>
     </root>
+    <logger name="au.com.tony.samples" additivity="false" level="${LOG_LEVEL:-DEBUG}">
+        <appender-ref ref="consoleAppender"/>
+    </logger>
 </configuration>

@@ -11,6 +11,6 @@ class SpringBootApplicationTest {
 
     @Test
     fun applicationStarts() {
-        main(arrayOf<String>())
+        main(arrayOf())
     }
 }
